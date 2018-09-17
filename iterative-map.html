@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Iterative Maps | PH881</title>
+    <script type="text/javascript" src="libs/d3.min.js"></script>
+	<script type="text/javascript" src="utility.js"></script>
+    <script type="text/javascript" src="plot.js"></script>
+    <script type="text/javascript" src="itermap.js"></script>
+	<link rel="stylesheet" type="text/css" href="styles/style.css" />
+</head>
+<body>
+	<nav>
+		<a class="nav-logo" href="index.html">PH 881</a>
+		<a href="iterative-map.html">Iterative Maps</a>
+    </nav>
+    <div class="content">
+        <h1>Iterative Maps</h1>
+        <h2>Logistic Map</h2>
+        <div class = "sub-content" id = "logisticMapGen">
+            <p class="input-desc">Starting Value: <span id="x0-val">0.5</span></p>
+            <input type="range" min="0" max="1" step="0.01" value="0.5" class="slider" id="x0">
+            <br>
+            <p class="input-desc">r Value: <span id="r-val">2.5</span></p>
+            <input type="range" min="0" max="4" step="0.01" value="2.5" class="slider" id="r">
+            <br>
+            <p class="input-desc">Number of Iterations: <span id="iter-val">50</span></p>
+            <input type="range" min="1" max="200" value="50" class="slider" id="iter">
+            <br>
+            <button onclick="iterUpdate()">Update</button>
+            <br>
+        </div>
+        <h2>Bifurcation Plot</h2>
+        <div class = "sub-content" id = "bftreeMapGen">
+            <label class="input-desc">Starting Value: </label>
+            <input type="number" id="bfx0" step="0.01" min="0" max="1" value="0.5" placeholder="x0"/>
+            <label class="input-desc">Min r: </label>
+            <input type="number" id="bfminr" step="0.01" min="0.0" max="4.0" value="0.0" placeholder="Min r"/>
+            <label class="input-desc">Max r: </label>
+            <input type="number" id="bfmaxr" step="0.01" min="0.0" max="4.0" value="4.0" placeholder="Max r"/>
+            <br>
+            <button onclick="bftUpdate()">Update</button>
+        </div>
+    </div>
+</body>
+
+<script>
+
+    var plotData = plottableMap(genLogisticMap(0.5, 2.5, 50));
+
+    var mapParams = lineParams;
+    mapParams.plotData = plotData;
+    mapParams.parentDiv = "#logisticMapGen";
+    mapParams.svgClass = "iterMap";
+    mapParams.xLabel = "Iteration";
+    mapParams.yLabel = "Value";
+    var iterPlot = new LinePlot(mapParams);
+
+    d3.select("#x0").on("input", function(){d3.select("#x0-val").text(this.value);});
+    d3.select("#r").on("input", function(){d3.select("#r-val").text(this.value);});
+    d3.select("#iter").on("input", function(){d3.select("#iter-val").text(this.value);});
+
+    plotData = genBifurcationTree(0.5, 0, 4);
+    var bftreeParams = scatterParams;
+    bftreeParams.plotData = plotData;
+    bftreeParams.parentDiv = "#bftreeMapGen";
+    bftreeParams.svgClass = "bfTree";
+    bftreeParams.xLabel = "Growth Rate";
+    bftreeParams.yLabel = "Population";
+    bftreeParams.scatterSize = 2.5;
+    var bftreePlot = new ScatterPlot(bftreeParams);
+    delete bftreeParams;
+    delete mapParams;
+
+    var iterUpdate = function(){
+        var x0 = d3.select("#x0").node().value;
+        var r = d3.select("#r").node().value;
+        var num_iter = d3.select("#iter").node().value;
+        var plotData = plottableMap(genLogisticMap(x0, r, num_iter));
+        iterPlot.update(plotData);
+    }
+
+    var bftUpdate = function(){
+        var x0 = Number(d3.select("#bfx0").node().value);
+        var minr = Number(d3.select("#bfminr").node().value);
+        var maxr = Number(d3.select("#bfmaxr").node().value);
+        
+        if(x0>1){
+            x0=1;
+            d3.select("#bfx0").node().value = 1;
+        }
+        else if(x0<0){
+            x0=0;
+            d3.select("#bfx0").node().value = 0;
+        }
+        
+        if(minr==maxr || minr<0 || maxr<0 || minr>4 || maxr>4){
+            minr = 0;
+            d3.select("#bfminr").node().value = 0;
+            maxr = 4;
+            d3.select("#bfmaxr").node().value = 4;
+        }
+
+        if(minr>maxr){
+            var temp = minr;
+            minr = maxr;
+            d3.select("#bfminr").node().value = maxr;
+            maxr = temp;
+            d3.select("#bfmaxr").node().value = temp;
+        }
+
+        var plotData = genBifurcationTree(x0, minr, maxr);
+        bftreePlot.update(plotData);
+    }
+</script>
+
+</html>
