@@ -26,3 +26,13 @@ var genBifurcationTree = function(x0, rmin, rmax, num_div = 100, num_iter = 200,
     }
     return plotData;
 }
+
+var genPoincarePlot = function(r, num_div = 1000){
+    var h = 1./num_div;
+    var plotData = []
+    for (var i=0; i<1.0; i= i+h){
+        plotData.push({'x': i, 'y': i*r*(1-i) });
+    }
+    plotData.push({'x': 1, 'y': 0}); // takes care of 1 not being plotted
+    return plotData;
+}
