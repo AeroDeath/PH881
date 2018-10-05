@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<html>
+<head>
+    <title>Monte Carlo Methods | PH881</title>
+    <script type="text/javascript" src="libs/d3.min.js"></script>
+	<script type="text/javascript" src="utility.js"></script>
+    <script type="text/javascript" src="plot.js"></script>
+    <script type="text/javascript" src="montecarlo.js"></script>
+	<link rel="stylesheet" type="text/css" href="styles/style.css" />
+</head>
+<body>
+	<nav>
+		<a class="nav-logo" href="index.html">PH 881</a>
+        <a href="iterative-map.html">Iterative Maps</a>
+        <a href="root-finding.html">Root Finding</a>
+        <a href="monte-carlo.html">Monte Carlo</a>
+    </nav>
+    <div class="content">
+        <h1>Monte Carlo Simulations</h1>
+
+        <h2>Calculating Pi</h2>
+        <p>Placeholder text</p>
+        <h2>Integrating exponential function</h2>
+        <p>Placeholder text</p>
+        <div class = "sub-content" id = "monteExp">
+        </div>
+    </div>
+</body>
+
+<script>
+    var integral = montecarloIntegral(Math.exp, [0, 1], [0, Math.exp(1)]);
+    var colors = {'inside': 'DeepSkyBlue', 'outside': 'DeepPink'}
+    var plotData = plottableMonteCarlo(integral['inside'], integral['outside'], colors);
+    var monteExpParams = multiScatterParams;
+    monteExpParams.plotData = plotData;
+    monteExpParams.parentDiv = "#monteExp";
+    monteExpParams.svgClass = "monteExp";
+    monteExpParams.scatterSize = 2.5;
+    var monteExpPlot = new MultiScatterPlot(monteExpParams);
+    delete monteExpParams;
+</script>
+
+</html>

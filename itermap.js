@@ -22,7 +22,6 @@ var genBifurcationTree = function(x0, rmin, rmax, num_div = 100, num_iter = 200,
         for(var i = num_iter-last_n; i<=num_iter; i+=1){
             plotData.push({"x": r, "y": data[i]});
         }
-        // console.log(r);
     }
     return plotData;
 }
