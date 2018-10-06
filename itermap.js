@@ -14,13 +14,13 @@ var plottableMap = function(data){
     return plotData;
 }
 
-var genBifurcationTree = function(x0, rmin, rmax, num_div = 100, num_iter = 200, last_n = 50){
+var genBifurcationTree = function(x0, rmin, rmax, num_div = 100, num_iter = 200, last_n = 50, color = "#53E1EC"){
     var h = (rmax - rmin)/num_div;
     var plotData = []
     for(var r = rmin; r<=rmax; r+=h){
         var data = genLogisticMap(x0, r, num_iter);
         for(var i = num_iter-last_n; i<=num_iter; i+=1){
-            plotData.push({"x": r, "y": data[i]});
+            plotData.push({"x": r, "y": data[i], "color": color});
         }
     }
     return plotData;

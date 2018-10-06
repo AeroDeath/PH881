@@ -78,14 +78,14 @@
     d3.select("#iter").on("input", function(){d3.select("#iter-val").text(this.value);});
 
     var plotData = genBifurcationTree(0.5, 0, 4);
-    var bftreeParams = scatterParams;
+    var bftreeParams = multiScatterParams;
     bftreeParams.plotData = plotData;
     bftreeParams.parentDiv = "#bftreeMapGen";
     bftreeParams.svgClass = "bfTree";
     bftreeParams.xLabel = "Growth Rate";
     bftreeParams.yLabel = "Population";
     bftreeParams.scatterSize = 2.5;
-    var bftreePlot = new ScatterPlot(bftreeParams);
+    var bftreePlot = new MultiScatterPlot(bftreeParams);
     delete bftreeParams;
 
     var plotData = genPoincarePlot(2)
