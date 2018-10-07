@@ -1,4 +1,4 @@
-var montecarloIntegral = function(foo, xrange, yrange, num_trials = 100){
+var montecarloIntegral = function(foo, xrange, yrange, num_trials = 1000){
     var num_inside = 0;
     var area = (xrange[1] - xrange[0]) * (yrange[1] - yrange[0]);
     var payload = {};

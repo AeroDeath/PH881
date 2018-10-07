@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
 <html>
+
 <head>
     <title>Monte Carlo Methods | PH881</title>
     <script type="text/javascript" src="libs/d3.min.js"></script>
-	<script type="text/javascript" src="utility.js"></script>
+    <script type="text/javascript" src="utility.js"></script>
     <script type="text/javascript" src="plot.js"></script>
     <script type="text/javascript" src="montecarlo.js"></script>
-	<link rel="stylesheet" type="text/css" href="styles/style.css" />
+    <link rel="stylesheet" type="text/css" href="styles/style.css" />
 </head>
+
 <body>
-	<nav>
-		<a class="nav-logo" href="index.html">PH 881</a>
+    <nav>
+        <a class="nav-logo" href="index.html">PH 881</a>
         <a href="iterative-map.html">Iterative Maps</a>
         <a href="root-finding.html">Root Finding</a>
         <a href="monte-carlo.html">Monte Carlo</a>
@@ -23,22 +25,50 @@
         <p>Placeholder text</p>
         <h2>Integrating exponential function</h2>
         <p>Placeholder text</p>
-        <div class = "sub-content" id = "monteExp">
+        <div class="sub-content" id="monteExp">
+            <label class="input-desc">Number of trials: </label>
+            <input type="number" id="expTrials" step="1" min="1" max="5000" value="1000" />
+            <br>
+            <p id="expArea">The calculated area is . The true area is </p>
+            <button onclick="monteExpUpdate()">Calculate Area</button>
         </div>
     </div>
 </body>
 
 <script>
     var integral = montecarloIntegral(Math.exp, [0, 1], [0, Math.exp(1)]);
-    var colors = {'inside': 'DeepSkyBlue', 'outside': 'DeepPink'}
-    var plotData = plottableMonteCarlo(integral['inside'], integral['outside'], colors);
-    var monteExpParams = multiScatterParams;
-    monteExpParams.plotData = plotData;
+    d3.select("#expArea").text("The calculated area is " + integral["area"]
+        + ". The true area is " + (Math.exp(1) - 1) + ".");
+    var colors = { 'inside': 'DeepSkyBlue', 'outside': 'DeepPink' };
+    var scatterPlotData = plottableMonteCarlo(integral['inside'], integral['outside'], colors);
+    var linePlotData = genLinePlotData(Math.exp, 0, 1, num_div = 10000);
+    var monteExpParams = fixedDomainMultiParams;
     monteExpParams.parentDiv = "#monteExp";
     monteExpParams.svgClass = "monteExp";
-    monteExpParams.scatterSize = 2.5;
-    var monteExpPlot = new MultiScatterPlot(monteExpParams);
+    monteExpParams.plotDatasets = [
+        { 'data': scatterPlotData, 'kind': 'scatter', 'scatterSize': 2, 'clear': true },
+        { 'data': linePlotData, 'kind': 'line', 'color': 'black', 'clear': false }
+    ];
+    var monteExpPlot = new FixedDomainMultiPlot(monteExpParams);
     delete monteExpParams;
+
+    var monteExpUpdate = function () {
+        var num_trials = Math.floor(Number(d3.select("#expTrials").node().value));
+        if (num_trials > 5000) {
+            num_trials = 5000;
+        }
+        else if (num_trials < 1) {
+            num_trials = 1;
+        }
+        var integral = montecarloIntegral(Math.exp, [0, 1], [0, Math.exp(1)], num_trials);
+        d3.select("#expArea").text("The calculated area is " + integral["area"]
+            + ". The true area is " + (Math.exp(1) - 1) + ".");
+        var scatterPlotData = plottableMonteCarlo(integral['inside'], integral['outside'], colors);
+        var plotDatasets = [
+            { 'data': scatterPlotData, 'kind': 'scatter', 'scatterSize': 2, 'clear': true },
+        ];
+        monteExpPlot.update(plotDatasets);
+    }
 </script>
 
 </html>
