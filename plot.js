@@ -24,21 +24,21 @@ var lineParams = {
 
 class MultiScatterPlot{
 
-    constructor(scatterParams){
-        this.content = d3.selectAll(scatterParams.parentDiv);
-        this.fullWidth = scatterParams.fullWidth;
-        this.fullHeight = scatterParams.fullHeight;
-        this.svgClass = scatterParams.svgClass
+    constructor(params){
+        this.content = d3.selectAll(params.parentDiv);
+        this.fullWidth = params.fullWidth;
+        this.fullHeight = params.fullHeight;
+        this.svgClass = params.svgClass
         this.content.append('svg').attr("class", this.svgClass);
         
-        this.margin = scatterParams.margin;
+        this.margin = params.margin;
         this.width = this.fullWidth - this.margin.left - this.margin.right;
         this.height = this.fullHeight - this.margin.top - this.margin.bottom;
 
         this.x = d3.scaleLinear().range([0, this.width]);
         this.y = d3.scaleLinear().range([this.height, 0]);
 
-        this.scatterSize = scatterParams.scatterSize;
+        this.scatterSize = params.scatterSize;
 
         this.xAxis = d3.axisBottom(this.x);
         this.yAxis = d3.axisLeft(this.y);
@@ -48,7 +48,7 @@ class MultiScatterPlot{
             .append("g")
             .attr("transform", "translate(" + this.margin.left + ',' + this.margin.top + ')')
         
-        var plotData = scatterParams.plotData;
+        var plotData = params.plotData;
 
         //domain of data
         this.x.domain(d3.extent(plotData, function(d){return d.x;})).nice();
@@ -67,7 +67,7 @@ class MultiScatterPlot{
             .attr("class", "label")
             .attr("transform", "translate(" + this.width/2 + "," + (this.height+this.margin.bottom-10) + ")")
             .style("text-anchor", "middle")
-            .text(scatterParams.xLabel);
+            .text(params.xLabel);
         //y-axis
         this.svg.append("g")
             .attr("class", "y-axis")
@@ -77,7 +77,7 @@ class MultiScatterPlot{
             .attr("class", "label")
             .attr("transform", "translate(" + (30 - this.margin.left) + "," + (this.height/2) + ") rotate(-90)")
             .style("text-anchor", "middle")
-            .text(scatterParams.yLabel);
+            .text(params.yLabel);
 
         //points
         this.svg.selectAll(".dot")
@@ -129,21 +129,21 @@ class MultiScatterPlot{
 
 class LinePlot{
 
-    constructor(scatterParams){
-        this.content = d3.selectAll(scatterParams.parentDiv);
-        this.fullWidth = scatterParams.fullWidth;
-        this.fullHeight = scatterParams.fullHeight;
-        this.svgClass = scatterParams.svgClass
+    constructor(params){
+        this.content = d3.selectAll(params.parentDiv);
+        this.fullWidth = params.fullWidth;
+        this.fullHeight = params.fullHeight;
+        this.svgClass = params.svgClass
         this.content.append('svg').attr("class", this.svgClass);
         
-        this.margin = scatterParams.margin;
+        this.margin = params.margin;
         this.width = this.fullWidth - this.margin.left - this.margin.right;
         this.height = this.fullHeight - this.margin.top - this.margin.bottom;
 
         this.x = d3.scaleLinear().range([0, this.width]);
         this.y = d3.scaleLinear().range([this.height, 0]);
 
-        this.color = scatterParams.color;
+        this.color = params.color;
         var color = this.color;
 
         this.xAxis = d3.axisBottom(this.x);
@@ -154,7 +154,7 @@ class LinePlot{
             .append("g")
             .attr("transform", "translate(" + this.margin.left + ',' + this.margin.top + ')')
         
-        var plotData = scatterParams.plotData;
+        var plotData = params.plotData;
 
         //domain of data
         this.x.domain(d3.extent(plotData, function(d){return d.x;})).nice();
@@ -175,7 +175,7 @@ class LinePlot{
             .attr("class", "label")
             .attr("transform", "translate(" + this.width/2 + "," + (this.height+this.margin.bottom-10) + ")")
             .style("text-anchor", "middle")
-            .text(scatterParams.xLabel);
+            .text(params.xLabel);
         //y-axis
         this.svg.append("g")
             .attr("class", "y-axis")
@@ -185,7 +185,7 @@ class LinePlot{
             .attr("class", "label")
             .attr("transform", "translate(" + (30 - this.margin.left) + "," + (this.height/2) + ") rotate(-90)")
             .style("text-anchor", "middle")
-            .text(scatterParams.yLabel);
+            .text(params.yLabel);
 
         //path
         this.svg.append("path")
@@ -228,5 +228,22 @@ class LinePlot{
             .delay(750)
             .style("opacity", 1);
 
+    }
+}
+
+class MultiPlot{
+    constructor(params){
+        this.content = d3.selectAll(params.parentDiv);
+        this.fullWidth = params.fullWidth;
+        this.fullHeight = params.fullHeight;
+        this.svgClass = params.svgClass
+        this.content.append('svg').attr("class", this.svgClass);
+        
+        this.margin = params.margin;
+        this.width = this.fullWidth - this.margin.left - this.margin.right;
+        this.height = this.fullHeight - this.margin.top - this.margin.bottom;
+
+        this.x = d3.scaleLinear().range([0, this.width]);
+        this.y = d3.scaleLinear().range([this.height, 0]);
     }
 }
