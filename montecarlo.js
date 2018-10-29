@@ -30,3 +30,34 @@ var plottableMonteCarlo = function(inside, outside, colors){
     };
     return plotData;
 }
+
+var findingPi = function(num_trials = 1000){
+    var num_inside = 0;
+    var r = 0.5;
+    var payload = {};
+    payload['inside'] = [];
+    payload['outside'] = [];
+    for(var i=0; i<num_trials; i+=1){
+        var x = Math.random();
+        var y = Math.random();
+        if(Math.pow((x-0.5), 2) + Math.pow((y-0.5), 2) < r*r){
+            num_inside += 1;
+            payload['inside'].push({'x': x, 'y': y});
+        }
+        else{
+            payload['outside'].push({'x': x, 'y': y});
+        }
+        
+    }
+    payload['area'] = (num_inside/num_trials);
+    payload['pi'] = payload['area']/(r*r);
+    return payload;
+}
+
+var up_circle = function(x){
+    return 0.5 + Math.sqrt(0.25 - (x-0.5)*(x-0.5))
+}
+
+var low_circle = function(x){
+    return 0.5 - Math.sqrt(0.25 - (x-0.5)*(x-0.5))
+}

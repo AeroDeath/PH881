@@ -44,6 +44,18 @@
         <div class="jumbotron">
             <h2>Calculating Pi</h2>
             <p>Placeholder text</p>
+            <div class="row">
+                <div class="graph-control col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <label class="input-desc">Number of trials: </label>
+                        <input type="number" class="form-control" id="piTrials" step="1" min="1" max="5000" value="1000" />
+                    </div>
+                    <button class="btn btn-default" onclick="montePiUpdate()">Calculate Pi</button>
+                </div>
+                <div class="sub-content col-lg-10 col-md-10 col-sm-12 col-xs-12" id="montePi">
+                </div>
+                <p id="piVal">The calculated value of Pi is </p>
+            </div>
         </div>
         <div class="jumbotron">
             <h2>Integrating exponential function</h2>
@@ -71,10 +83,31 @@
 </body>
 
 <script>
+
+    var colors = { 'inside': 'DeepSkyBlue', 'outside': 'DeepPink' };
+
+    var integral = findingPi();
+    d3.select("#piVal").text("The calculated area of the circle is " + integral["area"]
+        + " The value of Pi is then " + integral['pi']);
+    var scatterPlotData = plottableMonteCarlo(integral['inside'], integral['outside'], colors);
+    var linePlotData_up = genLinePlotData(up_circle, 0, 1, num_div = 10000);
+    var linePlotData_low = genLinePlotData(low_circle, 0, 1, num_div = 10000);
+    var montePiParams = fixedDomainMultiParams;
+    montePiParams.parentDiv = "#montePi";
+    montePiParams.svgClass = "montePi";
+    montePiParams.fullHeight = 470;
+    montePiParams.fullWidth = 490;
+    montePiParams.plotDatasets = [
+        { 'data': scatterPlotData, 'kind': 'scatter', 'scatterSize': 2, 'clear': true },
+        { 'data': linePlotData_up, 'kind': 'line', 'color': 'black', 'clear': false },
+        { 'data': linePlotData_low, 'kind': 'line', 'color': 'black', 'clear': false }
+    ];
+    var montePiPlot = new FixedDomainMultiPlot(montePiParams);
+    delete montePiParams;
+
     var integral = montecarloIntegral(Math.exp, [0, 1], [0, Math.exp(1)]);
     d3.select("#expArea").text("The calculated area is " + integral["area"]
         + " The true area is " + (Math.exp(1) - 1));
-    var colors = { 'inside': 'DeepSkyBlue', 'outside': 'DeepPink' };
     var scatterPlotData = plottableMonteCarlo(integral['inside'], integral['outside'], colors);
     var linePlotData = genLinePlotData(Math.exp, 0, 1, num_div = 10000);
     var monteExpParams = fixedDomainMultiParams;
@@ -86,6 +119,24 @@
     ];
     var monteExpPlot = new FixedDomainMultiPlot(monteExpParams);
     delete monteExpParams;
+
+    var montePiUpdate = function () {
+        var num_trials = Math.floor(Number(d3.select("#piTrials").node().value));
+        if (num_trials > 5000) {
+            num_trials = 5000;
+        }
+        else if (num_trials < 1) {
+            num_trials = 1;
+        }
+        var integral = findingPi(num_trials);
+        d3.select("#piVal").text("The calculated area of the circle is " + integral["area"]
+            + " The value of Pi is then " + integral['pi']);
+        var scatterPlotData = plottableMonteCarlo(integral['inside'], integral['outside'], colors);
+        var plotDatasets = [
+            { 'data': scatterPlotData, 'kind': 'scatter', 'scatterSize': 2, 'clear': true },
+        ];
+        montePiPlot.update(plotDatasets);
+    }
 
     var monteExpUpdate = function () {
         var num_trials = Math.floor(Number(d3.select("#expTrials").node().value));
