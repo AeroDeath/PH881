@@ -45,14 +45,19 @@ body{
 }
 
 .sub-content{
-    margin-left: 5%;
-    margin-right: 5%;
-    margin-top: 20px;
+    display: inline-block;
+    position: relative;
+    width: 100%;
+    padding-bottom: 100%;
+    vertical-align: top;
+    overflow: hidden;
+}
 
-    padding-top: 1px;
-    padding-bottom: 50px;
-
-    font-family: sans-serif;
+.svg-content {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
 }
 
 .input-desc{

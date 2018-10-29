@@ -25,12 +25,16 @@
         <p>Placeholder text</p>
         <h2>Integrating exponential function</h2>
         <p>Placeholder text</p>
-        <div class="sub-content" id="monteExp">
-            <label class="input-desc">Number of trials: </label>
-            <input type="number" id="expTrials" step="1" min="1" max="5000" value="1000" />
-            <br>
-            <p id="expArea">The calculated area is . The true area is </p>
-            <button onclick="monteExpUpdate()">Calculate Area</button>
+        <div class="graph">
+            <div class="graph-control">
+                <label class="input-desc">Number of trials: </label>
+                <input type="number" id="expTrials" step="1" min="1" max="5000" value="1000" />
+                <br>
+                <p id="expArea">The calculated area is . The true area is </p>
+                <button onclick="monteExpUpdate()">Calculate Area</button>
+            </div>
+            <div class="sub-content" id="monteExp">
+            </div>
         </div>
     </div>
 </body>

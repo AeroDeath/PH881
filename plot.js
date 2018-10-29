@@ -54,8 +54,9 @@ class MultiScatterPlot {
         this.xAxis = d3.axisBottom(this.x);
         this.yAxis = d3.axisLeft(this.y);
         this.svg = d3.select('.' + this.svgClass)
-            .attr("width", this.fullWidth)
-            .attr("height", this.fullHeight)
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", "0 0 " + this.fullWidth + " " + this.fullHeight)
+            .classed("svg-content", true)
             .append("g")
             .attr("transform", "translate(" + this.margin.left + ',' + this.margin.top + ')')
 
@@ -160,8 +161,9 @@ class LinePlot {
         this.xAxis = d3.axisBottom(this.x);
         this.yAxis = d3.axisLeft(this.y);
         this.svg = d3.select('.' + this.svgClass)
-            .attr("width", this.fullWidth)
-            .attr("height", this.fullHeight)
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", "0 0 " + this.fullWidth + " " + this.fullHeight)
+            .classed("svg-content", true)
             .append("g")
             .attr("transform", "translate(" + this.margin.left + ',' + this.margin.top + ')')
 
@@ -260,8 +262,9 @@ class FixedDomainMultiPlot {
         this.xAxis = d3.axisBottom(this.x);
         this.yAxis = d3.axisLeft(this.y);
         this.svg = d3.select('.' + this.svgClass)
-            .attr("width", this.fullWidth)
-            .attr("height", this.fullHeight)
+            .attr("preserveAspectRatio", "xMinYMin meet")
+            .attr("viewBox", "0 0 " + this.fullWidth + " " + this.fullHeight)
+            .classed("svg-content", true)
             .append("g")
             .attr("transform", "translate(" + this.margin.left + ',' + this.margin.top + ')')
 

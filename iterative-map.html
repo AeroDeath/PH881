@@ -23,29 +23,32 @@
 
         <h2>Logistic Map</h2>
         <p>Placeholder text</p>
-        <div class="sub-content" id="logisticMapGen">
-            <p class="input-desc">Starting Value:
-                <span id="x0-val">0.5</span>
-            </p>
-            <input type="range" min="0" max="1" step="0.01" value="0.5" class="slider" id="x0">
-            <br>
-            <p class="input-desc">r Value:
-                <span id="r-val">2.5</span>
-            </p>
-            <input type="range" min="0" max="4" step="0.01" value="2.5" class="slider" id="r">
-            <br>
-            <p class="input-desc">Number of Iterations:
-                <span id="iter-val">50</span>
-            </p>
-            <input type="range" min="1" max="200" value="50" class="slider" id="iter">
-            <br>
-            <button onclick="iterUpdate()">Update</button>
-            <br>
+        <div class="graph">
+            <div class="graph-control">
+                <p class="input-desc">Starting Value:
+                    <span id="x0-val">0.5</span>
+                </p>
+                <input type="range" min="0" max="1" step="0.01" value="0.5" class="slider" id="x0">
+                <br>
+                <p class="input-desc">r Value:
+                    <span id="r-val">2.5</span>
+                </p>
+                <input type="range" min="0" max="4" step="0.01" value="2.5" class="slider" id="r">
+                <br>
+                <p class="input-desc">Number of Iterations:
+                    <span id="iter-val">50</span>
+                </p>
+                <input type="range" min="1" max="200" value="50" class="slider" id="iter">
+                <br>
+                <button onclick="iterUpdate()">Update</button>
+                <br>
+            </div>
+            <div class="sub-content" id="logisticMapGen"></div>
         </div>
 
         <h2>Bifurcation Plot</h2>
         <p>Placeholder text</p>
-        <div class="sub-content" id="bftreeMapGen">
+        <div class="graph-control">
             <label class="input-desc">Starting Value: </label>
             <input type="number" id="bfx0" step="0.01" min="0" max="1" value="0.5" placeholder="x0" />
             <label class="input-desc">Min r: </label>
@@ -55,15 +58,17 @@
             <br>
             <button onclick="bftUpdate()">Update</button>
         </div>
+        <div class="sub-content" id="bftreeMapGen"></div>
 
         <h2>Poincare Plot</h2>
         <p>Placeholder Text</p>
-        <div class="sub-content" id="poincareMapGen">
+        <div class="graph-control">
             <label class="input-desc">r: </label>
             <input type="number" id="r-poincare" step="0.01" min="0.0" max="4.0" value="2.0" />
             <button onclick="poincareUpdate()">Update</button>
             <br>
         </div>
+        <div class="sub-content" id="poincareMapGen"></div>
 
     </div>
 </body>
