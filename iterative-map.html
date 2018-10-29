@@ -9,75 +9,122 @@
     <script type="text/javascript" src="plot.js"></script>
     <script type="text/javascript" src="itermap.js"></script>
     <link rel="stylesheet" type="text/css" href="styles/style.css" />
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+        crossorigin="anonymous">
 </head>
 
 <body>
-    <nav>
-        <a class="nav-logo" href="index.html">PH 881</a>
-        <a href="iterative-map.html">Iterative Maps</a>
-        <a href="root-finding.html">Root Finding</a>
-        <a href="monte-carlo.html">Monte Carlo</a>
+    <nav class="navbar navbar-expand-sm navbar-light">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav-content" aria-controls="nav-content"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <a class="navbar-brand" href="index.html">PH 881</a>
+
+        <div class="collapse navbar-collapse" id="nav-content">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="iterative-map.html">Iterative Maps</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="root-finding.html">Root Finding</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="monte-carlo.html">Monte Carlo Simulations</a>
+                </li>
+            </ul>
+        </div>
     </nav>
-    <div class="content">
-        <h1>Iterative Maps</h1>
-
-        <h2>Logistic Map</h2>
-        <p>Placeholder text</p>
-        <div class="graph">
-            <div class="graph-control">
-                <p class="input-desc">Starting Value:
-                    <span id="x0-val">0.5</span>
-                </p>
-                <input type="range" min="0" max="1" step="0.01" value="0.5" class="slider" id="x0">
-                <br>
-                <p class="input-desc">r Value:
-                    <span id="r-val">2.5</span>
-                </p>
-                <input type="range" min="0" max="4" step="0.01" value="2.5" class="slider" id="r">
-                <br>
-                <p class="input-desc">Number of Iterations:
-                    <span id="iter-val">50</span>
-                </p>
-                <input type="range" min="1" max="200" value="50" class="slider" id="iter">
-                <br>
-                <button onclick="iterUpdate()">Update</button>
-                <br>
-            </div>
-            <div class="sub-content" id="logisticMapGen"></div>
+    <div class="container">
+        <div class="pb-2 mt-4 mb-2 border-bottom">
+            <h1>Iterative Maps</h1>
         </div>
 
-        <h2>Bifurcation Plot</h2>
-        <p>Placeholder text</p>
-        <div class="graph">
-            <div class="graph-control">
-                <label class="input-desc">Starting Value: </label>
-                <input type="number" id="bfx0" step="0.01" min="0" max="1" value="0.5" placeholder="x0" />
-                <label class="input-desc">Min r: </label>
-                <input type="number" id="bfminr" step="0.01" min="0.0" max="4.0" value="0.0" placeholder="Min r" />
-                <label class="input-desc">Max r: </label>
-                <input type="number" id="bfmaxr" step="0.01" min="0.0" max="4.0" value="4.0" placeholder="Max r" />
-                <br>
-                <button onclick="bftUpdate()">Update</button>
+        <div class="jumbotron">
+            <h2>Logistic Map</h2>
+            <p>Placeholder text</p>
+            <div class="row">
+                <div class="graph-control col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <label class="input-desc">Starting Value:
+                            <span id="x0-val">0.5</span>
+                        </label>
+                        <input type="range" class="form-control" min="0" max="1" step="0.01" value="0.5" class="slider" id="x0">
+                        <br>
+                    </div>
+                    <div class="form-group">
+                        <label class="input-desc">r Value:
+                            <span id="r-val">2.5</span>
+                        </label>
+                        <input type="range" class="form-control" min="0" max="4" step="0.01" value="2.5" class="slider" id="r">
+                        <br>
+                    </div>
+                    <div class="form-group">
+                        <label class="input-desc">Number of Iterations:
+                            <span id="iter-val">50</span>
+                        </label>
+                        <input type="range" class="form-control" min="1" max="200" value="50" class="slider" id="iter">
+                        <br>
+                    </div>
+                    <button class="btn btn-default" onclick="iterUpdate()">Update</button>
+                </div>
+                <div class="sub-content col-lg-10 col-md-10 col-sm-12 col-xs-12" id="logisticMapGen"></div>
             </div>
-            <div class="sub-content" id="bftreeMapGen"></div>
         </div>
 
-        <h2>Poincare Plot</h2>
-        <p>Placeholder Text</p>
-        <div class="graph">
-            <div class="graph-control">
-                <label class="input-desc">r: </label>
-                <input type="number" id="r-poincare" step="0.01" min="0.0" max="4.0" value="2.0" />
-                <button onclick="poincareUpdate()">Update</button>
-                <br>
+        <div class="jumbotron">
+            <h2>Bifurcation Plot</h2>
+            <p>Placeholder text</p>
+            <div class="row">
+                <div class="graph-control col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <label class="input-desc">Starting Value: </label>
+                        <input type="number" class="form-control" id="bfx0" step="0.01" min="0" max="1" value="0.5" placeholder="x0" />
+                    </div>
+                    <div class="form-group">
+                        <label class="input-desc">Min r: </label>
+                        <input type="number" class="form-control" id="bfminr" step="0.01" min="0.0" max="4.0" value="0.0" placeholder="Min r" />
+                    </div>
+                    <div class="form-group">
+                        <label class="input-desc">Max r: </label>
+                        <input type="number" class="form-control" id="bfmaxr" step="0.01" min="0.0" max="4.0" value="4.0" placeholder="Max r" />
+                    </div>
+                    <br>
+                    <button class="btn btn-default" onclick="bftUpdate()">Update</button>
+                </div>
+                <div class="sub-content col-lg-10 col-md-10 col-sm-12 col-xs-12" id="bftreeMapGen"></div>
             </div>
-            <div class="sub-content" id="poincareMapGen"></div>
+        </div>
+
+        <div class="jumbotron">
+            <h2>Poincare Plot</h2>
+            <p>Placeholder Text</p>
+            <div class="row">
+                <div class="graph-control col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                    <label class="input-desc">r: </label>
+                    <input type="number" class="form-control" id="r-poincare" step="0.01" min="0.0" max="4.0" value="2.0" />
+                    </div>
+                    <button class="btn btn-default" onclick="poincareUpdate()">Update</button>
+                    <br>
+                </div>
+                <div class="sub-content col-lg-10 col-md-10 col-sm-12 col-xs-12" id="poincareMapGen"></div>
+            </div>
         </div>
 
     </div>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 </body>
 
 <script>
+
+
 
     var plotData = plottableMap(genLogisticMap(0.5, 2.5, 50));
 
