@@ -3,10 +3,11 @@
 <html>
 
 <head>
-    <title>Iterative Maps | PH881</title>
+    <title>Root Finding Methods | PH881</title>
     <script type="text/javascript" src="libs/d3.min.js"></script>
     <script type="text/javascript" src="utility.js"></script>
     <script type="text/javascript" src="plot.js"></script>
+    <script type="text/javascript" src="root-finding.js"></script>
     <link rel="stylesheet" type="text/css" href="styles/style.css" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
         crossorigin="anonymous">
@@ -42,6 +43,29 @@
         <div class="jumbotron">
             <h2>Newton Raphson</h2>
             <p>Placeholder text</p>
+            <div class="row">
+                <div class="graph-control col-lg-2 col-md-2 col-sm-12 col-xs-12">
+                    <div class="form-group">
+                        <label class="input-desc">Starting Point: </label>
+                        <input type="number" class="form-control" id="nr-start" step="0.01" min="-10.0" max="10.0" value="2.0" />
+                    </div>
+                    <div class="form-group">
+                        <label class="input-desc">Timestep: </label>
+                        <input type="number" class="form-control" id="nr-timestep" step="0.01" min="0.1" max="10.0" value="1.0" />
+                    </div>
+                    <div class="form-group">
+                        <label class="input-desc">Number of iters: </label>
+                        <input type="number" class="form-control" id="nr-iters" step="1" min="0" max="1000" value="25" />
+                    </div>
+                    <button class="btn btn-default" onclick="animated()" id="nr-button">Update</button>
+                </div>
+                <div class="sub-content col-lg-10 col-md-10 col-sm-12 col-xs-12" id="nrArcTan"></div>
+                <div class="graph-output col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <p id="nr-output-iter">Iteration No: 0</p>
+                    <p id="nr-output-x">Current Value of X: 0</p>
+                    <p id="nr-output-y">Current Value of y: 0</p>
+                </div>
+            </div>
         </div>
         <div class="jumbotron">
             <h2>Bisection Method</h2>
@@ -60,3 +84,81 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 </body>
+
+<script>
+    var linePlotData = genLinePlotData(Math.atan, -10, 10, num_div = 10000);
+    var nrArcTanParams = fixedDomainMultiParams;
+    nrArcTanParams.parentDiv = "#nrArcTan";
+    nrArcTanParams.svgClass = "nrArcTan";
+    nrArcTanParams.plotDatasets = [
+        { 'data': linePlotData, 'kind': 'line', 'color': 'black', 'clear': false }
+    ];
+    var nrArcTanPlot = new FixedDomainMultiPlot(nrArcTanParams);
+
+    nrArcTanPlot.svg.selectAll(".dot")
+        .data([{ 'x': 2, 'y': Math.atan(2), 'color': 'DeepPink' }])
+        .enter().append("circle")
+        .attr("class", "dot")
+        .attr("r", 3)
+        .attr("cx", function (d) { return nrArcTanPlot.x(d.x); })
+        .attr("cy", function (d) { return nrArcTanPlot.y(d.y); })
+        .style("fill", function (d) { return d.color; })
+
+    document.getElementById("nr-output-x").innerHTML = "Current Value of X: 2";
+    document.getElementById("nr-output-y").innerHTML = "Current Value of Y: " + Math.atan(2);
+
+    var animated = function () {
+
+        document.getElementById("nr-button").disabled = true;
+        var startingPoint = getNumInput('#nr-start');
+        var timestep = getNumInput('#nr-timestep') * 1000;
+        var num_iter = Math.floor(getNumInput('#nr-iters'));
+        var num_animation_paths = 1000;
+
+        var Solver = new NRArcTan();
+        var currentPoint = startingPoint;
+
+        var iter = 0;
+        nrTask = setInterval(function () {
+
+            document.getElementById("nr-output-iter").innerHTML = "Iteration No: " + iter;
+            document.getElementById("nr-output-x").innerHTML = "Current Value of X: " + currentPoint;
+            document.getElementById("nr-output-y").innerHTML = "Current Value of Y: " + Solver.foo(currentPoint);
+
+            var nextPoint = Solver.iter(currentPoint);
+            var animationPathData = genLinePlotData(Solver.foo, currentPoint, nextPoint, num_div = 1000);
+            var circ = nrArcTanPlot.svg.select('.dot');
+            nrArcTanPlot.svg.select('.dot')
+                .transition()
+                .delay(200)
+                .duration(timestep)
+                .tween('animatePath', function () {
+                    var interpolate = d3.interpolateRound(0, num_animation_paths);
+                    return function (t) {
+                        circ.attr("cx", nrArcTanPlot.x(animationPathData[interpolate(t)].x));
+                        circ.attr("cy", nrArcTanPlot.y(animationPathData[interpolate(t)].y));
+                    }
+                })
+
+
+            var slope = Solver.grad(currentPoint);
+            var c = Solver.foo(currentPoint) - slope * currentPoint;
+            var tangentPlotData = genLinePlotData(function (x) { return slope * x + c }, -10, 10, num_div = 2);
+            var plotDatasets = [
+                { 'data': tangentPlotData, 'kind': 'line', 'color': "SteelBlue", 'clear': true },
+            ];
+            nrArcTanPlot.update(plotDatasets);
+
+            currentPoint = nextPoint;
+            iter += 1;
+
+
+
+            if (iter >= num_iter || closeEnough(0, Solver.foo(currentPoint))) {
+                clearInterval(nrTask);
+                document.getElementById("nr-button").disabled = false;
+            }
+        }, (timestep + 200));
+
+    }
+</script>
